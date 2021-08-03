@@ -1,0 +1,83 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+
+<br>
+
+<div class="row">
+	<div class="col-md-5">
+		<h5>Artists:</h5>
+		<hr>
+		<div class="card card-body">
+			<a  href="{% url 'create-artist' %}" class="btn btn-primary  btn-sm btn-block">Create Artist</a>
+			<table class="table table-sm">
+				<tr>
+					<th></th>
+					<th>Artist</th>
+				</tr>
+
+				{% for artist in artists %}
+					<tr>
+						<td><a class="btn btn-sm btn-info" href="{% url 'update-artist' artist.id %}">Update Artist</a></td>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'delete-artist' artist.id %}">Delete Artist</a></td>
+						<td>{{artist.name}}</td>
+					</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-5">
+		<h5>Albums:</h5>
+		<hr>
+		<div class="card card-body">
+			<a  href="{% url 'create-album' %}" class="btn btn-primary  btn-sm btn-block">Create Album</a>
+			<table class="table table-sm">
+				<tr>
+					<th></th>
+					<th>Album</th>
+				</tr>
+
+				{% for album in albums %}
+					<tr>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'update-album' album.id %}">Update Album</a></td>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'delete-album' album.id %}">Delete Album</a></td>
+						<td>{{album.album_title}}</td>
+					</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-5">
+		<h5>Albums:</h5>
+		<hr>
+		<div class="card card-body">
+			<a  href="{% url 'create-song' %}" class="btn btn-primary  btn-sm btn-block">Create Song</a>
+			<table class="table table-sm">
+				<tr>
+					<th></th>
+					<th>Song</th>
+				</tr>
+
+				{% for song in songs %}
+					<tr>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'update-song' song.id %}">Update Song</a></td>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'delete-song' song.id %}">Delete Song</a></td>
+						<td>{{song.song_title}}</td>
+					</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
