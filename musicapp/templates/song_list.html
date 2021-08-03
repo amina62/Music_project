@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table">
+    <tr>
+        <a href="{% url 'song-create' %}" role="button" class="btn btn-primary w-100">Create Song</a>
+        <thead class="thead-light">
+            <tr>
+                <th scope="col"> Song Name</th>
+            </tr>
+        </thead>
+        <tbody class="main_body">
+            {% for song in songs %}
+            <tr>
+                <td class="float-right">{{song.song_title}}
+                    <a href="{% url 'song-update' song.id %}" role="button" class="btn btn-primary">Update Song</a>
+                    <a href="{% url 'song-delete' song.id %}" role="button" class="btn btn-danger">Delete Song</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+</table>
+    <a href="{% url 'album-list' %}" role="button" class="btn btn-primary">All Albums</a>
+    <a href="{% url 'artist-list' %}" role="button" class="btn btn-primary">All Artists</a>
+
+{% endblock %}

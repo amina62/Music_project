@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table">
+    <tr>
+        <a href="{% url 'artist-create' %}" role="button" class="btn btn-primary w-100">Create Artist</a>
+        <thead class="thead-light">
+            <tr>
+                <th scope="col"> Artist Name</th>
+            </tr>
+        </thead>
+        <tbody class="main_body">
+            {% for artist in artists %}
+            <tr>
+                <td class="float-right">{{artist.name}}
+                    <a href="{% url 'artist-update' artist.id %}" role="button" class="btn btn-primary">Update Artist</a>
+                    <a href="{% url 'artist-delete' artist.id %}" role="button" class="btn btn-danger">Delete Artist</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+</table>
+    <a href="{% url 'album-list' %}" role="button" class="btn btn-primary">All Albums</a>
+    <a href="{% url 'song-list' %}" role="button" class="btn btn-primary">All Songs</a>
+
+{% endblock %}

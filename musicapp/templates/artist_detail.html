@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">Artist Details #{{artist.id}}</h5>
+    </div>
+    <div class="card-body">
+    <dl class="row">
+      <dt class="col-sm-3">Artist Name</dt>
+      <dd class="col-sm-9">{{ artists.name }}</dd>
+    </dl>
+
+    </div>
+</div>
+<a href="{% url 'artist-list' %}" role="button" class="btn btn-primary">Go back</a>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table">
+    <tr>
+        <a href="{% url 'album-create' %}" role="button" class="btn btn-primary w-100">Create Album</a>
+        <thead class="thead-light">
+            <tr>
+                <th scope="col"> Album Name</th>
+            </tr>
+        </thead>
+        <tbody class="main_body">
+            {% for album in albums %}
+            <tr>
+                <td>{{album.album_title}}
+                    <a href="{% url 'album-update' album.id %}" role="button" class="btn btn-primary">Update Album</a>
+                    <a href="{% url 'album-delete' album.id %}" role="button" class="btn btn-warning">Delete Album</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+</table>
+    <a href="{% url 'artist-list' %}" role="button" class="btn btn-primary">All Artists</a>
+{% endblock %}
