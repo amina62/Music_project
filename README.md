@@ -4,7 +4,7 @@
 
 -Album 
 
-- Song 
+-Song 
 
-## implemented firstly with function-based views and class-based views in django
+- implemented firstly with function-based views and class-based views in django
 
