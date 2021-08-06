@@ -1,13 +1,14 @@
 from django.db import models
-
+import datetime
 # Create your models here.
 
 class Artist(models.Model):
     name = models.CharField(max_length=250)
+    date_of_birth = models.DateTimeField(blank=True, null=True)
+    nationality = models.CharField(max_length=250, null=True)
 
     def __str__(self):
         return self.name
-
 
 class Album(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE, null=True)

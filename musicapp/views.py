@@ -3,11 +3,13 @@ from django.http import HttpResponse
 from .forms import ArtistForm, AlbumForm, SongForm
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.utils.text import slugify
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
-from .models import *
-
+from .models import Artist, Album, Song
+from .forms import ArtistForm
 #class based views:
 
 # Artists
@@ -18,12 +20,17 @@ class ArtistListView(ListView):
     template_name = main_html
     context_object_name = 'artists'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        return context
+
 class ArtistCreateView(CreateView):
-    model = Artist
+    #model = Artist
     template_name = 'artist_create.html'
-    # template_name = main_html
-    fields = ['name', ]
+    # fields = "__all__"
     success_url = reverse_lazy('artist-list')
+    form_class = ArtistForm
 
 class ArtistDetailView(DetailView):
     model = Artist
@@ -35,6 +42,7 @@ class ArtistUpdateView(UpdateView):
     template_name = 'artist_update.html'
     context_object_name = 'artists'
     fields = ['name', ]
+
     def get_success_url(self):
         return reverse_lazy('artist-detail', kwargs={'pk': self.object.id})
 
