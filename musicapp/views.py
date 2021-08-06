@@ -5,6 +5,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 # Create your views here.
 
@@ -20,9 +21,11 @@ class ArtistListView(ListView):
     template_name = main_html
     context_object_name = 'artists'
 
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-
+        title = _('Artists List')
+        context['title'] = title
         return context
 
 class ArtistCreateView(CreateView):
@@ -41,7 +44,7 @@ class ArtistUpdateView(UpdateView):
     model = Artist
     template_name = 'artist_update.html'
     context_object_name = 'artists'
-    fields = ['name', ]
+    fields = '__all__'
 
     def get_success_url(self):
         return reverse_lazy('artist-detail', kwargs={'pk': self.object.id})

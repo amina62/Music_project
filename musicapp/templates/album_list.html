@@ -18,7 +18,7 @@
                     <a href="{% url 'album-delete' album.id %}" role="button" class="btn btn-warning">Delete Album</a>
                 </td>
                 <td>
-                    {{ album.artist.name }}
+                    {{ album.artist.full_name }}
                 </td>
             </tr>
             {% endfor %}

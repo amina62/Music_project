@@ -1,12 +1,32 @@
 {% extends "base.html" %}
-
+{% load i18n %}
+{% load l10n %}
 {% block content %}
+    <h1>{% trans "lets translate this" %}</h1>
+    {% get_current_language as LANGUAGE_CODE %}
+    <h2>{{ LANGUAGE_CODE }}</h2>
+
+    <h2>{{ title }}</h2>
+    <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+    <input type="hidden" name="text" value="{{ redirect_to }}">
+    <select name="language" id="">
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+            <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %} >
+            {{ language.name_local }} ({{ language.code }})
+            </option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="GO">
+    </form>
+
 <table class="table">
     <tr>
-        <a href="{% url 'artist-create' %}" role="button" class="btn btn-primary w-100">Create Artist</a>
+        <a href="{% url 'artist-create' %}" role="button" class="btn btn-primary w-100">{% trans 'Create Artist' %}</a>
         <thead class="thead-light">
             <tr>
-                <th scope="col"> Artist Name</th>
+                <th scope="col"> {% trans 'Artist Name' %}</th>
             </tr>
         </thead>
         <tbody class="main_body artist_body">
@@ -15,9 +35,9 @@
                 <td class="artist_data"  role="button" artist_data="{{ artist.id }}" artist_dob="{{ artist.date_of_birth }}"
                     artist_nationality="{{ artist.nationality }}"
                 >
-                    <a class="artists-all-data">{{ artist.name }}</a>
-                    <a href="{% url 'artist-update' artist.id %}" role="button" class="btn btn-primary">Update Artist</a>
-                    <a href="{% url 'artist-delete' artist.id %}" role="button" class="btn btn-danger">Delete Artist</a>
+                    <a class="artists-all-data">{{ artist.full_name}}</a>
+                    <a href="{% url 'artist-update' artist.id %}" role="button" class="btn btn-primary">{% trans 'Update Artist' %}</a>
+                    <a href="{% url 'artist-delete' artist.id %}" role="button" class="btn btn-danger">{% trans 'Delete Artist' %}</a>
                 </td>
             </tr>
 
@@ -26,8 +46,8 @@
         </tbody>
 </table>
 
-    <a href="{% url 'album-list' %}" role="button" class="btn btn-primary">All Albums</a>
-    <a href="{% url 'song-list' %}" role="button" class="btn btn-primary">All Songs</a>
+    <a href="{% url 'album-list' %}" role="button" class="btn btn-primary">{% trans 'All Albums' %}</a>
+    <a href="{% url 'song-list' %}" role="button" class="btn btn-primary">{% trans 'All Songs' %}</a>
 
 
                 <!--MODAL-->
@@ -63,9 +83,9 @@
         let artist_nationality = catcher.attr('artist_nationality');
 
         $('.artist-info').html(
-            `<li>Artist Name: ${artist_name}</li>
-             <li>DOB # ${artist_dob}</li>
-             <li>Nationality # ${artist_nationality}</li>`);
+            `<li>{% trans 'Artist Name' %}: ${artist_name}</li>
+             <li>{% trans 'Date of birth' %} # ${artist_dob}</li>
+             <li>{% trans 'Nationality' %} # ${artist_nationality}</li>`);
         $('#exampleModal').modal('show');
     })
 
