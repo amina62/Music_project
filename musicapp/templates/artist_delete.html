@@ -1,16 +1,17 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block content %}
 <div class="card">
     <div class="card-header">
-        <h5 class="card-title">Delete Artist #{{artist.id}}</h5>
+        <h5 class="card-title">{% trans 'Delete Artist' %} #{{artist.id}}</h5>
     </div>
     <div class="card-body">
         <form method="post">
             {% csrf_token %}
             <div class="alert alert-warning" role="alert">
-                Are you sure you want to delete <strong>{{ artist.name }}</strong> ?
+                {% trans 'Are you sure you want to delete' %} <strong>{{ artist.name }}</strong> ?
             </div>
-            <button type="submit" class="btn btn-danger">Delete</button>
+            <button type="submit" class="btn btn-danger">{% trans 'Delete' %}</button>
         </form>
     </div>
 </div>

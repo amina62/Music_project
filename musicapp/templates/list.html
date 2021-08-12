@@ -2,25 +2,6 @@
 {% load i18n %}
 {% load l10n %}
 {% block content %}
-    <h1>{% trans "lets translate this" %}</h1>
-    {% get_current_language as LANGUAGE_CODE %}
-    <h2>{{ LANGUAGE_CODE }}</h2>
-
-    <h2>{{ title }}</h2>
-    <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
-    <input type="hidden" name="text" value="{{ redirect_to }}">
-    <select name="language" id="">
-        {% get_available_languages as LANGUAGES %}
-        {% get_language_info_list for LANGUAGES as languages %}
-        {% for language in languages %}
-            <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %} >
-            {{ language.name_local }} ({{ language.code }})
-            </option>
-        {% endfor %}
-    </select>
-    <input type="submit" value="GO">
-    </form>
-
 <table class="table">
     <tr>
         <a href="{% url 'artist-create' %}" role="button" class="btn btn-primary w-100">{% trans 'Create Artist' %}</a>
@@ -36,8 +17,8 @@
                     artist_nationality="{{ artist.nationality }}"
                 >
                     <a class="artists-all-data">{{ artist.full_name}}</a>
-                    <a href="{% url 'artist-update' artist.id %}" role="button" class="btn btn-primary">{% trans 'Update Artist' %}</a>
-                    <a href="{% url 'artist-delete' artist.id %}" role="button" class="btn btn-danger">{% trans 'Delete Artist' %}</a>
+                    <a href="{% url 'artist-update' artist.id %}" role="button" class="btn btn-primary float-right">{% trans 'Update Artist' %}</a>
+                    <a href="{% url 'artist-delete' artist.id %}" role="button" class="btn btn-danger float-right">{% trans 'Delete Artist' %}</a>
                 </td>
             </tr>
 

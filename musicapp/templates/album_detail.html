@@ -1,18 +1,19 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block content %}
 
 <div class="card">
     <div class="card-header">
-        <h5 class="card-title">Album Details #{{albums.id}}</h5>
+        <h5 class="card-title">{% trans 'Album Details' %} #{{albums.id}}</h5>
     </div>
     <div class="card-body">
     <dl class="row">
-      <dt class="col-sm-3">Albums Name</dt>
+      <dt class="col-sm-3">{% trans 'Albums Name' %}</dt>
       <dd class="col-sm-9">{{ albums.album_title }}</dd>
     </dl>
 
     </div>
 </div>
-<a href="{% url 'album-list' %}" role="button" class="btn btn-primary">Go back</a>
+<a href="{% url 'album-list' %}" role="button" class="btn btn-primary">{% trans 'Go back' %}</a>
 
 {% endblock %}

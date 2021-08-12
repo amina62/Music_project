@@ -17,3 +17,4 @@
 - use of Foreign keys and relationship between models
 - Implementations of functional and class-based views in django 
 - Implementation of CRUD operations on multiple models
+- implementation of django translations and use of gettext_lazy

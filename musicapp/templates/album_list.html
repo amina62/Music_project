@@ -1,21 +1,22 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load static %}
 {% block content %}
 <table class="table">
     <tr>
-        <a href="{% url 'album-create' %}" role="button" class="btn btn-primary w-100">Create Album</a>
+        <a href="{% url 'album-create' %}" role="button" class="btn btn-primary w-100">{% trans 'Create Album' %}</a>
         <thead class="thead-light">
             <tr>
-                <th scope="col"> Album Name</th>
-                <th scope="col"> <strong>Artist Name</strong></th>
+                <th scope="col">{% trans 'Album Name' %}</th>
+                <th scope="col"> <strong>{% trans 'Artist Name' %}</strong></th>
             </tr>
         </thead>
         <tbody class="main_body">
             {% for album in albums %}
             <tr>
                 <td>{{album.album_title}}
-                    <a href="{% url 'album-update' album.id %}" role="button" class="btn btn-primary">Update Album</a>
-                    <a href="{% url 'album-delete' album.id %}" role="button" class="btn btn-warning">Delete Album</a>
+                    <a href="{% url 'album-update' album.id %}" role="button" class="btn btn-primary float-right">{% trans 'Update Album' %}</a>
+                    <a href="{% url 'album-delete' album.id %}" role="button" class="btn btn-warning float-right">{% trans 'Delete Album' %}</a>
                 </td>
                 <td>
                     {{ album.artist.full_name }}
@@ -24,6 +25,6 @@
             {% endfor %}
         </tbody>
 </table>
-    <a href="{% url 'artist-list' %}" role="button" class="btn btn-primary">All Artists</a>
-    <a href="{% url 'song-list' %}" role="button" class="btn btn-primary">All Songs</a>
+    <a href="{% url 'artist-list' %}" role="button" class="btn btn-primary">{% trans 'All Artists' %}</a>
+    <a href="{% url 'song-list' %}" role="button" class="btn btn-primary">{% trans 'All Songs' %}</a>
 {% endblock %}
