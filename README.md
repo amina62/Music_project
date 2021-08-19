@@ -18,3 +18,4 @@
 - Implementations of functional and class-based views in django 
 - Implementation of CRUD operations on multiple models
 - implementation of django translations and use of gettext_lazy
+- Ajax requests for createview, deleteview and updateview

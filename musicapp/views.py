@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import ArtistForm, AlbumForm, SongForm
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -16,24 +16,32 @@ from .forms import ArtistForm
 # Artists
 main_html = "list.html"
 
+
 class ArtistListView(ListView):
     model = Artist
     template_name = main_html
     context_object_name = 'artists'
 
-
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        title = _('Artists List')
-        context['title'] = title
+        context['title'] = _('Artists List')
+        context['form'] = ArtistForm
         return context
+
 
 class ArtistCreateView(CreateView):
     #model = Artist
     template_name = 'artist_create.html'
     # fields = "__all__"
-    success_url = reverse_lazy('artist-list')
     form_class = ArtistForm
+
+    def form_valid(self, form):
+        form.save()
+        return JsonResponse(data={"message": 'All good'}, status=201)
+
+    def form_invalid(self, form):
+        return JsonResponse(data={"errors": form.errors}, status=500)
+
 
 class ArtistDetailView(DetailView):
     model = Artist
@@ -42,9 +50,33 @@ class ArtistDetailView(DetailView):
 
 class ArtistUpdateView(UpdateView):
     model = Artist
-    template_name = 'artist_update.html'
+    # template_name = 'artist_update.html'
     context_object_name = 'artists'
-    fields = '__all__'
+    form_class = ArtistForm
+
+    def get(self, request, *args, **kwargs):
+        if artist := Artist.objects.get(pk=kwargs['pk']):
+            return JsonResponse(data={
+                "first_name": artist.first_name,
+                "last_name": artist.last_name,
+                "DOB": artist.date_of_birth,
+                "nationality": artist.nationality
+            })
+
+    def form_valid(self, form):
+        form.save()
+        return JsonResponse({
+            "message": "Artist updated",
+            "url": self.get_success_url(),
+
+            "first_name": form.cleaned_data['first_name'],
+            "last_name": form.cleaned_data['last_name'],
+            "DOB": form.cleaned_data['date_of_birth'],
+            "nationality": form.cleaned_data['nationality']
+        }, status=201)
+
+    def form_invalid(self, form):
+        return JsonResponse({'error': form.errors})
 
     def get_success_url(self):
         return reverse_lazy('artist-detail', kwargs={'pk': self.object.id})
@@ -53,6 +85,8 @@ class ArtistDeleteView(DeleteView):
     model = Artist
     template_name = 'artist_delete.html'
     success_url = reverse_lazy('artist-list')
+
+
 
 # Albums
 class AlbumListView(ListView):

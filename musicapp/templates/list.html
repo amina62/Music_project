@@ -4,7 +4,8 @@
 {% block content %}
 <table class="table">
     <tr>
-        <a href="{% url 'artist-create' %}" role="button" class="btn btn-primary w-100">{% trans 'Create Artist' %}</a>
+{#        <a href="{% url 'artist-create' %}" role="button" class="btn btn-primary w-100">{% trans 'Create Artist' %}</a>#}
+        <button role="button" class="create btn btn-primary w-100">{% trans 'Create Artist' %}</button>
         <thead class="thead-light">
             <tr>
                 <th scope="col"> {% trans 'Artist Name' %}</th>
@@ -17,10 +18,12 @@
                     artist_nationality="{{ artist.nationality }}"
                 >
                     <a class="artists-all-data">{{ artist.full_name}}</a>
-                    <a href="{% url 'artist-update' artist.id %}" role="button" class="btn btn-primary float-right">{% trans 'Update Artist' %}</a>
-                    <a href="{% url 'artist-delete' artist.id %}" role="button" class="btn btn-danger float-right">{% trans 'Delete Artist' %}</a>
+{#                    <a href="{% url 'artist-update' artist.id %}" role="button" class="btn btn-primary float-right">{% trans 'Update Artist' %}</a>#}
+                    <button artist_pk="{{ artist.pk }}" class="update_button btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal2" >{% trans 'Update/Delete Artist' %}</button>
+{#                    <a href="{% url 'artist-delete' artist.id %}" role="button" class="btn btn-danger float-right">{% trans 'Delete Artist' %}</a>#}
                 </td>
             </tr>
+
 
 
             {% endfor %}
@@ -54,6 +57,67 @@
 
             <!--END MODAL-->
 
+
+                    <!--MODAL 2-->
+            <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="artist-header" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body artist-details">
+                      <form class="update-artist-form"  method="post">
+                            <input class="d-none" id="artist_pk" name="artist_pk" />
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <button type="button" class="update btn btn-primary">{% trans 'Update' %}</button>
+                            <button type="button" class="delete btn btn-danger">{% trans 'Delete' %}</button>
+                            <button type="button" class="close btn btn-warning">{% trans 'Close' %}</button>
+                        </form>
+                        </div>
+                    </div>
+
+                  </div>
+                </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--END MODAL-->
+
+        <!--MODAL 3-->
+            <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="artist-header" id="exampleModalLabel">{% trans 'Create New Artist' %}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body artist-details">
+                      <form class="create-artist-form"  method="post">
+{#                            <input class="d-none" id="artist_pk" name="artist_pk" />#}
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <button type="button" class="create-artist btn btn-primary">{% trans 'Create' %}</button>
+                        </form>
+                        </div>
+                    </div>
+
+                  </div>
+                </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--END MODAL-->
+
 <script type="text/javascript">
 
 
@@ -70,8 +134,125 @@
         $('#exampleModal').modal('show');
     })
 
+
+
 </script>
 
+    <script type="text/javascript">
+
+    $(".create").click(function (){
+        $('#exampleModal3').modal('show');
+    })
+
+    $(".create-artist").click(function (){
+        {#var data = {#}
+        {#    first_name: $('#id_first_name').val(),#}
+        {#    last_name: $('#id_last_name').val(),#}
+        {#    date_of_birth: $('#id_date_of_birth').val(),#}
+        {#    nationality: $('#id_nationality').val()#}
+        {#};#}
+
+        {#var data = new FormData();#}
+        {#var form =  $('.create-artist-form');#}
+        {#var data = new FormData(form);#}
+        $.ajax({
+            type: "POST",
+            url: `/artist-create/`,
+            dataType: "json",
+            data: $('.create-artist-form').serialize(),
+            {#data: data,#}
+            success: function (response) {
+                console.log(response)
+                alert('Artist Created');
+                window.location.reload();
+                $('#exampleModal3').modal('hide');
+            },
+            error: function handleError(e){
+                console.log(e)
+            }
+        })
+    })
+
+    $(".update_button").click(function () {
+        let artist_pk = $(this).closest('.artist_data').attr('artist_data');
+        $.ajax({
+            type: "GET",
+            url: `/artist/update/${artist_pk}`,
+            dataType: "json",
+            success: function (data) {
+                $('.artist-header').html(`${artist_pk}`)
+                $('#id_first_name').val(data.first_name)
+                $('#id_last_name').val(data.last_name)
+                $('#id_date_of_birth').val(data.DOB)
+                $('#id_nationality').val(data.nationality)
+                $('#artist_pk').val(artist_pk)
+                $('#exampleModal2').modal('show');
+            },
+            error: function handleError(e){
+                console.log(e)
+            }
+        });
+
+    })
+
+    $(".update").click(function () {
+      let artist_pk = $('#artist_pk').val()
+        console.log(artist_pk)
+        $.ajax({
+            {#headers: {"X-CSRFToken": getCookie('csrftoken')},#}
+            type: "POST",
+            url: `/artist/update/${artist_pk}`,
+            data: $('.update-artist-form').serialize(),
+                //Serialize the form or send each field manually
+            success: function (data) {
+                console.log(data)
+                {#window.location.replace(data.url)#}
+                $('#id_first_name').val(data.first_name)
+                $('#id_last_name').val(data.last_name)
+                $('#id_date_of_birth').val(data.DOB)
+                $('#id_nationality').val(data.nationality)
+                alert('Artist updated')
+            },
+            error: function handleError(e){
+                console.log(e)
+            }
+        });
+
+    })
+
+    $(".delete").click(function (){
+        let artist_pk = $('#artist_pk').val()
+        console.log(artist_pk)
+        var confirmation = confirm("are you sure you want to remove the item?");
+        if (confirmation == true) {
+            $.ajax({
+                headers: {"X-CSRFToken": $('input[name="csrfmiddlewaretoken"]').val()},
+                type: "POST",
+                url: `/artist/delete/${artist_pk}`,
+                success: function (data) {
+                    {#var confirmation = confirm("are you sure you want to remove the item?");#}
+                    {#if (confirmation == true) {#}
+                    {#debugger#}
+                    alert('Artist deleted')
+                    window.location.reload()
+                    {#} else {#}
+                    {#    event.preventDefault()#}
+                    {#    alert('artist not deleted')#}
+                    {#}#}
+                },
+                error: function handleError(e) {
+                    console.log(e)
+                }
+            })
+        } else {
+            alert ('Artist not deleted')
+        }
+    })
+
+    $(".close").click(function (){
+        $('#exampleModal2').modal('hide');
+    })
+    </script>
 
 
 {% endblock %}
